@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Adventure for Young Coders 🚀</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+  :root {
+    --sky:#4FC3F7; --sun:#FFD54F; --grass:#66BB6A; --coral:#FF7043;
+    --purple:#AB47BC; --pink:#EC407A; --navy:#1A237E;
+    --card-shadow:0 8px 32px rgba(31,38,135,0.13); --radius:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#e0f7fa 0%,#f3e5f5 50%,#fff9c4 100%);min-height:100vh;color:#222;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+    background-image:radial-gradient(circle,#FFD54F 1px,transparent 1px),radial-gradient(circle,#AB47BC 1.5px,transparent 1.5px),radial-gradient(circle,#4FC3F7 1px,transparent 1px);
+    background-size:120px 120px,180px 180px,90px 90px;background-position:10px 10px,60px 60px,30px 80px;
+    opacity:.18;pointer-events:none;z-index:0;animation:starFloat 20s linear infinite;}
+  @keyframes starFloat{from{background-position:10px 10px,60px 60px,30px 80px}to{background-position:130px 130px,240px 240px,120px 170px}}
+  .wrapper{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:20px 16px 60px;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,#3949AB 50%,#1565C0 100%);border-radius:28px;padding:40px 32px 36px;text-align:center;margin-bottom:30px;position:relative;overflow:hidden;box-shadow:0 12px 48px rgba(26,35,126,.35);}
+  .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:rgba(255,213,79,.15);border-radius:50%;}
+  .hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;background:rgba(76,195,247,.15);border-radius:50%;}
+  .hero h1{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,3rem);color:var(--sun);text-shadow:2px 4px 8px rgba(0,0,0,.3);letter-spacing:1px;position:relative;z-index:1;animation:bounceIn .8s ease;}
+  .hero p{color:rgba(255,255,255,.85);font-size:1.05rem;margin-top:10px;font-weight:600;position:relative;z-index:1;}
+  .rocket-anim{display:inline-block;animation:rocketFly 2s ease-in-out infinite;}
+  @keyframes rocketFly{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+  @keyframes bounceIn{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+
+  /* LOGIN */
+  .login-card{background:white;border-radius:var(--radius);padding:28px 28px 24px;margin-bottom:28px;box-shadow:var(--card-shadow);border-top:5px solid var(--coral);}
+  .login-card h2{font-family:'Fredoka One',cursive;color:var(--coral);font-size:1.4rem;margin-bottom:14px;}
+  .form-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .form-group{flex:1;min-width:200px;}
+  .form-group label{font-weight:700;font-size:.9rem;color:#555;display:block;margin-bottom:6px;}
+  .form-group input{width:100%;padding:11px 14px;border:2.5px solid #e0e0e0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;transition:border-color .2s,box-shadow .2s;background:#fafafa;}
+  .form-group input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(79,195,247,.2);}
+  .btn-start{background:linear-gradient(135deg,var(--grass),#43A047);color:white;border:none;padding:13px 32px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;margin-top:14px;box-shadow:0 4px 16px rgba(102,187,106,.4);transition:transform .15s,box-shadow .15s;}
+  .btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(102,187,106,.5);}
+
+  /* NAV */
+  .nav-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;justify-content:center;}
+  .tab-btn{background:white;border:3px solid transparent;padding:10px 20px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(0,0,0,.08);color:#555;}
+  .tab-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.12);}
+  .tab-btn.active{color:white;box-shadow:0 4px 16px rgba(0,0,0,.2);transform:translateY(-2px);}
+  .tab-btn[data-tab="learn"].active{background:var(--sky);border-color:var(--sky);}
+  .tab-btn[data-tab="practice"].active{background:var(--coral);border-color:var(--coral);}
+  .tab-btn[data-tab="finalquiz"].active{background:var(--purple);border-color:var(--purple);}
+
+  /* PANELS */
+  .panel{display:none;animation:fadeSlide .4s ease;}
+  .panel.active{display:block;}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  /* CARDS */
+  .card{background:white;border-radius:var(--radius);padding:26px 28px;margin-bottom:22px;box-shadow:var(--card-shadow);border-left:6px solid var(--sky);}
+  .card.green{border-left-color:var(--grass);}
+  .card.orange{border-left-color:var(--coral);}
+  .card.purple{border-left-color:var(--purple);}
+  .card.pink{border-left-color:var(--pink);}
+  .card.yellow{border-left-color:var(--sun);}
+  .card h2{font-family:'Fredoka One',cursive;font-size:1.45rem;margin-bottom:10px;color:#1A73E8;}
+  .card.green h2{color:var(--grass);}
+  .card.orange h2{color:var(--coral);}
+  .card.purple h2{color:var(--purple);}
+  .card.pink h2{color:var(--pink);}
+  .card.yellow h2{color:#F57F17;}
+  .card p,.card li{font-size:.97rem;line-height:1.7;color:#333;}
+  .card ul{padding-left:18px;}
+  .card ul li{margin-bottom:4px;}
+
+  /* TAG GRID */
+  .tag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:14px;}
+  .tag-item{background:linear-gradient(135deg,#e3f2fd,#f3e5f5);border-radius:14px;padding:14px 16px;border:2px solid #e0e0e0;transition:transform .2s;}
+  .tag-item:hover{transform:scale(1.04);}
+  .tag-item .tag-name{font-family:'Fredoka One',cursive;color:var(--navy);font-size:1rem;}
+  .tag-item .tag-desc{font-size:.82rem;color:#555;margin-top:4px;}
+  .code-inline{background:#1A237E;color:#FFD54F;padding:2px 8px;border-radius:6px;font-family:'Courier New',monospace;font-size:.88rem;font-weight:700;}
+  .html-structure{background:#1A237E;border-radius:16px;padding:20px 24px;color:#E8F5E9;font-family:'Courier New',monospace;font-size:.9rem;line-height:2;margin:16px 0;white-space:pre;overflow-x:auto;}
+  .html-structure .ht{color:#FFD54F;}
+  .html-structure .att{color:#80DEEA;}
+  .html-structure .val{color:#F48FB1;}
+  .html-structure .cmt{color:#A5D6A7;font-style:italic;}
+  .fun-fact{background:linear-gradient(135deg,#FFF8E1,#FFFDE7);border:2px solid var(--sun);border-radius:14px;padding:14px 18px;margin:14px 0;font-size:.93rem;}
+  .fun-fact strong{color:var(--coral);}
+
+  /* TOPIC MINI-QUIZ */
+  .topic-quiz-wrap{background:linear-gradient(135deg,#F3E5F5,#EDE7F6);border-radius:var(--radius);padding:24px 26px;margin-top:10px;border:3px solid var(--purple);}
+  .topic-quiz-wrap h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--purple);margin-bottom:4px;}
+  .tq-subtitle{font-size:.88rem;color:#777;margin-bottom:16px;font-weight:600;}
+  .tq-question{background:white;border-radius:14px;padding:16px 18px;margin-bottom:12px;box-shadow:0 4px 14px rgba(0,0,0,.07);border-left:5px solid var(--purple);}
+  .tq-question .tq-qtext{font-weight:700;font-size:.97rem;margin-bottom:10px;color:#222;}
+  .tq-options label{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:.9rem;font-weight:600;border:2px solid #e0e0e0;transition:all .2s;background:#fafafa;}
+  .tq-options label:hover{border-color:var(--purple);background:#f3e5f5;}
+  .tq-options input[type=radio]{accent-color:var(--purple);width:16px;height:16px;}
+  .tq-options label.tq-correct{background:#E8F5E9;border-color:var(--grass);}
+  .tq-options label.tq-wrong{background:#FFEBEE;border-color:#EF5350;}
+  .btn-tq-submit{background:linear-gradient(135deg,var(--purple),#7B1FA2);color:white;border:none;padding:11px 28px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;margin-top:8px;box-shadow:0 4px 14px rgba(171,71,188,.4);transition:transform .15s;}
+  .btn-tq-submit:hover{transform:translateY(-2px);}
+  .tq-result{margin-top:14px;padding:14px 18px;border-radius:14px;font-weight:700;font-size:1rem;display:none;animation:fadeSlide .3s ease;}
+  .tq-result.show{display:block;}
+  .tq-result.pass{background:#E8F5E9;border:2px solid var(--grass);color:#1B5E20;}
+  .tq-result.fail{background:#FFEBEE;border:2px solid #EF5350;color:#B71C1C;}
+  .btn-tq-retry{background:linear-gradient(135deg,var(--coral),#BF360C);color:white;border:none;padding:8px 20px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.88rem;cursor:pointer;margin-top:8px;transition:transform .15s;}
+  .btn-tq-retry:hover{transform:translateY(-2px);}
+
+  /* PRACTICE */
+  .practice-card{background:white;border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;box-shadow:var(--card-shadow);}
+  .practice-card h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--coral);margin-bottom:8px;}
+  .task-desc{background:#FFF8E1;border-left:4px solid var(--sun);padding:12px 16px;border-radius:10px;margin-bottom:14px;font-size:.95rem;}
+  .editor-wrap{display:flex;gap:14px;flex-wrap:wrap;}
+  .editor-box{flex:1;min-width:240px;}
+  .editor-box label{font-weight:700;font-size:.85rem;color:#777;display:block;margin-bottom:6px;}
+  textarea.code-editor{width:100%;height:210px;padding:14px;background:#0D1B2A;color:#E0F7FA;font-family:'Courier New',monospace;font-size:.88rem;line-height:1.7;border:3px solid #263238;border-radius:12px;resize:vertical;outline:none;tab-size:2;transition:border-color .2s;}
+  textarea.code-editor:focus{border-color:var(--sky);}
+  .preview-box{flex:1;min-width:240px;}
+  .preview-frame{width:100%;height:210px;border:3px solid #e0e0e0;border-radius:12px;background:white;}
+  .btn-run{background:linear-gradient(135deg,var(--coral),#E64A19);color:white;border:none;padding:11px 28px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;margin-top:12px;box-shadow:0 4px 14px rgba(255,112,67,.4);transition:transform .15s;}
+  .btn-run:hover{transform:translateY(-2px);}
+
+  /* FINAL QUIZ LOCKED */
+  .quiz-locked{background:white;border-radius:var(--radius);padding:48px 28px;text-align:center;box-shadow:var(--card-shadow);border:4px dashed #e0e0e0;}
+  .quiz-locked .lock-icon{font-size:4rem;animation:pulse 2s ease-in-out infinite;display:inline-block;}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+  .quiz-locked h2{font-family:'Fredoka One',cursive;font-size:1.8rem;color:#999;margin:14px 0 8px;}
+  .quiz-locked p{color:#bbb;font-size:1rem;max-width:400px;margin:0 auto;}
+
+  /* FINAL QUIZ */
+  .quiz-header{text-align:center;margin-bottom:24px;}
+  .quiz-header h2{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--purple);}
+  .progress-bar-wrap{background:#e0e0e0;border-radius:50px;height:14px;margin:14px 0 4px;overflow:hidden;}
+  .progress-bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--grass),var(--sky));transition:width .5s ease;}
+  .progress-label{font-size:.82rem;color:#777;text-align:right;}
+  .question-card{background:white;border-radius:var(--radius);padding:22px 24px;margin-bottom:18px;box-shadow:var(--card-shadow);border-left:6px solid var(--purple);animation:fadeSlide .3s ease;}
+  .question-card .q-num{font-size:.8rem;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;}
+  .question-card .q-text{font-size:1.05rem;font-weight:700;margin:8px 0 14px;}
+  .options label{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:.95rem;font-weight:600;border:2.5px solid #e0e0e0;transition:all .2s;background:#fafafa;}
+  .options label:hover{border-color:var(--purple);background:#f3e5f5;}
+  .options input[type=radio]{accent-color:var(--purple);width:18px;height:18px;}
+  .options label.correct{background:#E8F5E9;border-color:var(--grass);}
+  .options label.wrong{background:#FFEBEE;border-color:#EF5350;}
+  .btn-submit{background:linear-gradient(135deg,var(--purple),#7B1FA2);color:white;border:none;padding:13px 36px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;display:block;margin:10px auto 0;box-shadow:0 4px 16px rgba(171,71,188,.4);transition:transform .15s;}
+  .btn-submit:hover{transform:translateY(-2px);}
+
+  /* RESULT */
+  .result-card{background:white;border-radius:var(--radius);padding:36px 28px;text-align:center;box-shadow:var(--card-shadow);display:none;}
+  .result-card.show{display:block;animation:bounceIn .6s ease;}
+  .score-circle{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-family:'Fredoka One',cursive;font-size:2.2rem;color:white;box-shadow:0 8px 32px rgba(0,0,0,.2);}
+  .result-card h2{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:6px;}
+  .result-card p{color:#555;font-size:1rem;margin-bottom:12px;}
+  .btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+  .btn-download{background:linear-gradient(135deg,#1565C0,var(--navy));color:white;border:none;padding:11px 26px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;box-shadow:0 4px 14px rgba(21,101,192,.4);transition:transform .15s;}
+  .btn-download:hover{transform:translateY(-2px);}
+  .btn-retry{background:linear-gradient(135deg,var(--coral),#BF360C);color:white;border:none;padding:11px 26px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;box-shadow:0 4px 14px rgba(255,112,67,.4);transition:transform .15s;}
+  .btn-retry:hover{transform:translateY(-2px);}
+
+  /* BADGE */
+  .badge-section{margin-top:24px;}
+  .badge-wrap{background:linear-gradient(135deg,#FFF9C4,#FFFDE7);border:4px solid var(--sun);border-radius:24px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(255,213,79,.3);}
+  .badge-icon{font-size:3.5rem;animation:sway 3s linear infinite;display:inline-block;}
+  @keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+  .badge-wrap h3{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--navy);margin:10px 0 4px;}
+  .badge-wrap .badge-name{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--coral);}
+  .badge-wrap .badge-title{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--purple);margin:4px 0;}
+  .badge-wrap .badge-date{font-size:.85rem;color:#888;margin-top:8px;}
+
+  /* ANSWER REVIEW */
+  .answer-review-card{background:white;border-radius:var(--radius);padding:26px 28px;margin:22px 0;box-shadow:var(--card-shadow);border-top:5px solid var(--purple);animation:fadeSlide .4s ease;}
+  .answer-review-card h3{font-family:'Fredoka One',cursive;font-size:1.35rem;color:var(--purple);margin-bottom:16px;}
+  .ar-row{display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border-radius:12px;margin-bottom:10px;}
+  .ar-row-correct{background:#E8F5E9;border-left:5px solid var(--grass);}
+  .ar-row-wrong{background:#FFEBEE;border-left:5px solid #EF5350;}
+  .ar-qnum{font-family:'Fredoka One',cursive;font-size:1rem;color:#777;min-width:28px;padding-top:2px;}
+  .ar-content{flex:1;}
+  .ar-question{font-weight:700;font-size:.92rem;color:#333;margin-bottom:5px;}
+  .ar-answer{font-size:.88rem;color:#444;}
+  .ar-label{font-weight:800;}
+  .ar-row-correct .ar-label{color:#2E7D32;}
+  .ar-row-wrong .ar-label{color:#C62828;}
+
+  /* LAST SCORE BAR */
+  .last-score-bar{background:linear-gradient(90deg,#E8F5E9,#E3F2FD);border:2px solid #B2DFDB;border-radius:14px;padding:12px 18px;margin-bottom:18px;display:none;font-weight:700;color:#1B5E20;font-size:.95rem;}
+  .last-score-bar.show{display:block;}
+
+  /* TEACHER */
+  .teacher-card{background:white;border-radius:var(--radius);padding:28px;box-shadow:var(--card-shadow);}
+  .teacher-card h2{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--navy);margin-bottom:18px;}
+  .score-table{width:100%;border-collapse:collapse;font-size:.9rem;}
+  .score-table th{background:var(--navy);color:white;padding:11px 14px;text-align:left;}
+  .score-table th:first-child{border-radius:10px 0 0 0;}
+  .score-table th:last-child{border-radius:0 10px 0 0;}
+  .score-table td{padding:10px 14px;border-bottom:1px solid #f0f0f0;}
+  .score-table tr:hover td{background:#f9f9f9;}
+  .score-pill{display:inline-block;padding:3px 12px;border-radius:50px;font-weight:800;font-size:.82rem;}
+  .pill-green{background:#E8F5E9;color:#2E7D32;}
+  .pill-orange{background:#FFF3E0;color:#E65100;}
+  .pill-red{background:#FFEBEE;color:#C62828;}
+  .no-data{color:#aaa;text-align:center;padding:30px;font-size:1.1rem;}
+  .btn-clear{background:#EF5350;color:white;border:none;padding:10px 22px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;transition:transform .15s;}
+  .btn-clear:hover{transform:translateY(-2px);}
+  .btn-excel{background:linear-gradient(135deg,#1B7F4A,#27AE60);color:white;border:none;padding:10px 22px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;box-shadow:0 4px 14px rgba(39,174,96,.35);transition:transform .15s;}
+  .btn-excel:hover{transform:translateY(-2px);}
+  .btn-csv{background:linear-gradient(135deg,#0277BD,#0288D1);color:white;border:none;padding:10px 22px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.9rem;cursor:pointer;box-shadow:0 4px 14px rgba(2,119,189,.35);transition:transform .15s;}
+  .btn-csv:hover{transform:translateY(-2px);}
+
+  /* QUIZ UNLOCK CONTROL */
+  .unlock-control{background:linear-gradient(135deg,#E8EAF6,#EDE7F6);border:3px solid var(--navy);border-radius:18px;padding:20px 24px;margin-bottom:28px;}
+  .unlock-control h3{font-family:'Fredoka One',cursive;color:var(--navy);font-size:1.2rem;margin-bottom:6px;}
+  .unlock-control p{font-size:.9rem;color:#555;margin-bottom:14px;}
+  .unlock-toggle{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .toggle-switch{position:relative;width:60px;height:30px;cursor:pointer;}
+  .toggle-switch input{opacity:0;width:0;height:0;}
+  .toggle-slider{position:absolute;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:30px;transition:.3s;}
+  .toggle-slider:before{content:'';position:absolute;width:22px;height:22px;left:4px;bottom:4px;background:white;border-radius:50%;transition:.3s;}
+  .toggle-switch input:checked+.toggle-slider{background:var(--grass);}
+  .toggle-switch input:checked+.toggle-slider:before{transform:translateX(30px);}
+  .toggle-label{font-family:'Fredoka One',cursive;font-size:1.05rem;}
+  .toggle-label.locked{color:#E53935;}
+  .toggle-label.unlocked{color:#2E7D32;}
+  .unlock-status-badge{display:inline-block;padding:5px 16px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:.9rem;}
+  .status-locked{background:#FFEBEE;color:#C62828;border:2px solid #EF9A9A;}
+  .status-unlocked{background:#E8F5E9;color:#1B5E20;border:2px solid #A5D6A7;}
+
+  /* TOPIC CONTROLS in teacher panel */
+  .topic-controls{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+  .topic-toggle-row{display:flex;align-items:center;justify-content:space-between;
+    background:white;border-radius:12px;padding:12px 16px;border:2px solid #e8eaf6;flex-wrap:wrap;gap:10px;}
+  .topic-toggle-row .tt-label{font-family:'Fredoka One',cursive;font-size:.95rem;color:var(--navy);}
+  .topic-toggle-row .tt-info{font-size:.8rem;color:#777;font-weight:600;}
+
+  /* PLENARY QUIZ LOCKED STATE */
+  .plenary-locked{
+    border-radius:var(--radius);padding:28px 24px;text-align:center;
+    background:linear-gradient(135deg,#f5f5f5,#eeeeee);
+    border:3px dashed #ccc;margin-top:10px;
+  }
+  .plenary-locked .pl-icon{font-size:2.8rem;margin-bottom:10px;display:block;animation:pulse 2s ease-in-out infinite;}
+  .plenary-locked h4{font-family:'Fredoka One',cursive;font-size:1.2rem;color:#999;margin-bottom:6px;}
+  .plenary-locked p{color:#bbb;font-size:.9rem;font-weight:600;max-width:380px;margin:0 auto;}
+
+  /* SECTION DIVIDER */
+  .section-divider{text-align:center;margin:32px 0 20px;position:relative;}
+  .section-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c5cae9,transparent);}
+  .section-divider span{background:linear-gradient(135deg,#e0f7fa,#f3e5f5);padding:8px 20px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.05rem;color:var(--navy);position:relative;z-index:1;border:2px solid #c5cae9;}
+
+  @media(max-width:600px){
+    .hero{padding:28px 18px;}
+    .card,.practice-card,.login-card{padding:18px 16px;}
+    .editor-wrap{flex-direction:column;}
+    textarea.code-editor,.preview-frame{height:160px;}
+    .tag-grid{grid-template-columns:1fr 1fr;}
+    .unlock-toggle{gap:10px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- HERO -->
+<div class="hero">
+  <h1><span class="rocket-anim">🚀</span> HTML Adventure for Young Coders</h1>
+  <p>Learn to build websites like a real web developer! 🌐</p>
+</div>
+
+<!-- LOGIN -->
+<div class="login-card" id="loginCard">
+  <h2>👋 Welcome, Coder! Enter Your Details</h2>
+  <div class="form-row">
+    <div class="form-group">
+      <label>✏️ Your Name</label>
+      <input type="text" id="studentName" placeholder="e.g. Ahmed Al Maktoum" />
+    </div>
+    <div class="form-group">
+      <label>🏫 Class / Section</label>
+      <input type="text" id="studentClass" placeholder="e.g. 6A" />
+    </div>
+  </div>
+  <button class="btn-start" onclick="startLearning()">🎉 Start My Adventure!</button>
+  <div id="loginMsg" style="margin-top:10px;color:#E53935;font-weight:700;font-size:.9rem;"></div>
+</div>
+
+<div class="last-score-bar" id="lastScoreBar"></div>
+
+<!-- NAV -->
+<div class="nav-tabs" id="mainNav" style="display:none">
+  <button class="tab-btn active" data-tab="learn"     onclick="showTab('learn')">📚 Learn HTML</button>
+  <button class="tab-btn"        data-tab="practice"  onclick="showTab('practice')">💻 Practice</button>
+  <button class="tab-btn"        data-tab="finalquiz" onclick="showTab('finalquiz')">🏆 Final Quiz</button>
+  <button class="tab-btn" id="teacherAccessBtn" onclick="openTeacherLogin()" style="background:#f0f0f0;color:#aaa;border:2px dashed #ccc;">🔒 Teacher</button>
+</div>
+
+<!-- TEACHER MODAL -->
+<div id="teacherModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:32px 28px;max-width:360px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.3);text-align:center;">
+    <div style="font-size:2.5rem;margin-bottom:8px;">👩‍🏫</div>
+    <h2 style="font-family:'Fredoka One',cursive;color:#1A237E;margin-bottom:6px;">Teacher Access</h2>
+    <p style="color:#777;font-size:.9rem;margin-bottom:18px;">Enter the teacher password to access the Teacher Panel.</p>
+    <input type="password" id="teacherPwd" placeholder="Enter password"
+      style="width:100%;padding:11px 14px;border:2.5px solid #e0e0e0;border-radius:12px;font-size:1rem;font-family:'Nunito',sans-serif;font-weight:600;margin-bottom:10px;"
+      onkeydown="if(event.key==='Enter') checkTeacherPwd()" />
+    <div id="teacherPwdMsg" style="color:#E53935;font-size:.85rem;font-weight:700;min-height:18px;margin-bottom:10px;"></div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button onclick="checkTeacherPwd()" style="background:linear-gradient(135deg,#1A237E,#3949AB);color:white;border:none;padding:11px 24px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;">🔓 Unlock</button>
+      <button onclick="closeTeacherModal()" style="background:#f0f0f0;color:#555;border:none;padding:11px 24px;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PANEL 1: LEARN
+     ============================================================ -->
+<div class="panel" id="panel-learn">
+
+  <!-- ========== TOPIC A ========== -->
+  <div class="section-divider"><span>📖 Topic A — What is HTML, Editors &amp; Basic Structure</span></div>
+
+  <div class="card">
+    <h2>🌐 What is HTML?</h2>
+    <p>HTML stands for <strong>HyperText Markup Language</strong>. It is the <em>skeleton</em> of every website you visit! 🦴</p>
+    <p style="margin-top:10px;">Think of it like a <strong>recipe</strong> 🍳 — HTML tells the browser what to show on the page, just like a recipe tells a chef what to cook!</p>
+    <div class="fun-fact"><strong>🇦🇪 UAE Connect:</strong> The website for the Burj Khalifa (burjkhalifa.ae) was built using HTML, CSS and JavaScript — just like you'll learn today!</div>
+    <p>When you type a web address like <code class="code-inline">www.google.com</code>, your browser reads HTML code and shows you a beautiful page. Cool, right? 😎</p>
+  </div>
+
+  <div class="card green">
+    <h2>🛠️ HTML Editors</h2>
+    <p>To write HTML, you need a <strong>text editor</strong> — it's like your coding notebook!</p>
+    <div class="tag-grid">
+      <div class="tag-item"><div class="tag-name">📝 Notepad</div><div class="tag-desc">Simple editor built into Windows. Free &amp; easy!</div></div>
+      <div class="tag-item"><div class="tag-name">💙 VS Code</div><div class="tag-desc">Popular professional editor with syntax colours!</div></div>
+      <div class="tag-item"><div class="tag-name">🌐 Notepad++</div><div class="tag-desc">Better than Notepad with helpful features.</div></div>
+      <div class="tag-item"><div class="tag-name">☁️ CodePen</div><div class="tag-desc">Online editor — no install needed!</div></div>
+    </div>
+    <div class="fun-fact">💡 <strong>Tip:</strong> Save your file with <code class="code-inline">.html</code> extension (e.g. <code class="code-inline">mypage.html</code>) then open in Chrome!</div>
+  </div>
+
+  <div class="card orange">
+    <h2>🏗️ Basic HTML Structure</h2>
+    <p>Every HTML page has the same basic skeleton — like the frame of the Burj Khalifa! 🗼</p>
+    <div class="html-structure"><span class="cmt">&lt;!-- Every HTML page starts like this --&gt;</span>
+<span class="ht">&lt;html&gt;</span>               <span class="cmt">&lt;!-- The whole website --&gt;</span>
+  <span class="ht">&lt;head&gt;</span>             <span class="cmt">&lt;!-- Brain of the page (not shown) --&gt;</span>
+    <span class="ht">&lt;title&gt;</span><span class="val">My Page</span><span class="ht">&lt;/title&gt;</span> <span class="cmt">&lt;!-- Tab title --&gt;</span>
+  <span class="ht">&lt;/head&gt;</span>
+  <span class="ht">&lt;body&gt;</span>             <span class="cmt">&lt;!-- What users SEE --&gt;</span>
+    <span class="ht">&lt;h1&gt;</span><span class="val">Hello World!</span><span class="ht">&lt;/h1&gt;</span>
+    <span class="ht">&lt;p&gt;</span><span class="val">I love UAE! 🇦🇪</span><span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/body&gt;</span>
+<span class="ht">&lt;/html&gt;</span></div>
+    <ul>
+      <li>🔵 <strong>&lt;html&gt;</strong> — The container for everything</li>
+      <li>🟡 <strong>&lt;head&gt;</strong> — Hidden info (title, settings)</li>
+      <li>🟢 <strong>&lt;body&gt;</strong> — Everything you <em>see</em> on screen!</li>
+    </ul>
+  </div>
+
+  <!-- MINI QUIZ A -->
+  <div id="tqA-wrap">
+    <div class="plenary-locked" id="tqA-locked">
+      <span class="pl-icon">🔒</span>
+      <h4>Plenary Quiz — Topic A Locked</h4>
+      <p>Your teacher will unlock this quiz after Topic A has been covered in class.</p>
+    </div>
+    <div id="tqA-unlocked" style="display:none">
+      <div class="topic-quiz-wrap">
+        <h3>🧩 Plenary Quiz — Topic A</h3>
+        <div class="tq-subtitle">What is HTML &nbsp;·&nbsp; Editors &nbsp;·&nbsp; Basic Structure &nbsp;—&nbsp; 5 Questions</div>
+        <div id="tqA-questions"></div>
+        <button class="btn-tq-submit" id="tqA-btn" onclick="submitTopicQuiz('A')">✅ Check Answers</button>
+        <div class="tq-result" id="tqA-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TOPIC B ========== -->
+  <div class="section-divider" style="margin-top:38px;"><span>📖 Topic B — Important HTML Tags &amp; Elements</span></div>
+
+  <div class="card">
+    <h2>📋 Important HTML Tags</h2>
+    <div class="tag-grid">
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;h1&gt;–&lt;h3&gt;</span></div><div class="tag-desc">Headings — h1 biggest, h3 smallest. Like titles!</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;p&gt;</span></div><div class="tag-desc">Paragraph — for writing sentences and text.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;img&gt;</span></div><div class="tag-desc">Image — shows a picture. No closing tag needed!</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;a&gt;</span></div><div class="tag-desc">Anchor — creates a clickable hyperlink.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;br&gt;</span></div><div class="tag-desc">Line Break — moves to next line. Like pressing Enter!</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;hr&gt;</span></div><div class="tag-desc">Horizontal Rule — draws a line across the page.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;ul&gt; &lt;li&gt;</span></div><div class="tag-desc">Unordered list — bullet points!</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;ol&gt; &lt;li&gt;</span></div><div class="tag-desc">Ordered list — numbered (1, 2, 3...).</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;div&gt;</span></div><div class="tag-desc">Division — a box to group elements together.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;span&gt;</span></div><div class="tag-desc">Inline container — for styling part of a sentence.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;table&gt;</span></div><div class="tag-desc">Table — displays data in rows and columns.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;form&gt;</span></div><div class="tag-desc">Form — collects user input (name, email etc.).</div></div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <h2>🏷️ HTML Tags &amp; Elements</h2>
+    <p>An HTML <strong>tag</strong> is like a label. Most tags come in pairs — an <em>opening</em> tag and a <em>closing</em> tag:</p>
+    <div class="html-structure"><span class="ht">&lt;h1&gt;</span><span class="val">Welcome to UAE!</span><span class="ht">&lt;/h1&gt;</span>
+ ↑ Opening tag       ↑ Content       ↑ Closing tag (has /)</div>
+    <p style="margin-top:10px;">Opening + content + closing = one <strong>HTML Element</strong> 🎁</p>
+    <p style="margin-top:8px;">Some tags are <strong>self-closing</strong> — they don't need a closing tag:</p>
+    <div class="html-structure"><span class="ht">&lt;br&gt;</span>   <span class="cmt">&lt;!-- line break — no closing tag --&gt;</span>
+<span class="ht">&lt;hr&gt;</span>   <span class="cmt">&lt;!-- horizontal line — no closing tag --&gt;</span>
+<span class="ht">&lt;img&gt;</span>  <span class="cmt">&lt;!-- image — also self-closing! --&gt;</span></div>
+  </div>
+
+  <!-- MINI QUIZ B -->
+  <div id="tqB-wrap">
+    <div class="plenary-locked" id="tqB-locked">
+      <span class="pl-icon">🔒</span>
+      <h4>Plenary Quiz — Topic B Locked</h4>
+      <p>Your teacher will unlock this quiz after Topic B has been covered in class.</p>
+    </div>
+    <div id="tqB-unlocked" style="display:none">
+      <div class="topic-quiz-wrap">
+        <h3>🧩 Plenary Quiz — Topic B</h3>
+        <div class="tq-subtitle">Important HTML Tags &amp; Elements &nbsp;—&nbsp; 5 Questions</div>
+        <div id="tqB-questions"></div>
+        <button class="btn-tq-submit" id="tqB-btn" onclick="submitTopicQuiz('B')">✅ Check Answers</button>
+        <div class="tq-result" id="tqB-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TOPIC C ========== -->
+  <div class="section-divider" style="margin-top:38px;"><span>📖 Topic C — Text Formatting Tags &amp; Attributes</span></div>
+
+  <div class="card pink">
+    <h2>✍️ HTML Text Formatting Tags</h2>
+    <div class="tag-grid">
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;b&gt;</span></div><div class="tag-desc"><b>Bold text</b> — makes text thick and heavy.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;i&gt;</span></div><div class="tag-desc"><i>Italic text</i> — makes text lean sideways.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;u&gt;</span></div><div class="tag-desc"><u>Underline</u> — draws a line under text.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;strong&gt;</span></div><div class="tag-desc"><strong>Strong</strong> — like bold but means "important".</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;em&gt;</span></div><div class="tag-desc"><em>Emphasize</em> — like italic but means "emphasis".</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;mark&gt;</span></div><div class="tag-desc"><mark>Highlight</mark> — yellow highlight on text.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;sup&gt;</span></div><div class="tag-desc">Super<sup>script</sup> — text above the line (2²).</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;sub&gt;</span></div><div class="tag-desc">Sub<sub>script</sub> — text below the line (H₂O).</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;del&gt;</span></div><div class="tag-desc"><del>Deleted</del> — strikethrough text.</div></div>
+      <div class="tag-item"><div class="tag-name"><span class="code-inline">&lt;small&gt;</span></div><div class="tag-desc"><small>Small text</small> — makes text smaller.</div></div>
+    </div>
+  </div>
+
+  <div class="card yellow">
+    <h2>🎛️ HTML Attributes</h2>
+    <p>Attributes give <em>extra information</em> to HTML tags. They go inside the opening tag:</p>
+    <div class="html-structure"><span class="ht">&lt;img</span> <span class="att">src</span>=<span class="val">"burj.jpg"</span> <span class="att">alt</span>=<span class="val">"Burj Khalifa 🗼"</span> <span class="att">width</span>=<span class="val">"200"</span><span class="ht">&gt;</span>
+
+<span class="ht">&lt;a</span> <span class="att">href</span>=<span class="val">"https://www.uae.gov.ae"</span><span class="ht">&gt;</span><span class="val">UAE Website</span><span class="ht">&lt;/a&gt;</span>
+
+<span class="ht">&lt;p</span> <span class="att">style</span>=<span class="val">"color:blue;"</span><span class="ht">&gt;</span><span class="val">Blue text!</span><span class="ht">&lt;/p&gt;</span></div>
+    <ul>
+      <li>🔗 <code class="code-inline">href</code> — the link address for <code class="code-inline">&lt;a&gt;</code> tags</li>
+      <li>🖼️ <code class="code-inline">src</code> — the image file path for <code class="code-inline">&lt;img&gt;</code> tags</li>
+      <li>📝 <code class="code-inline">alt</code> — description of an image (for accessibility)</li>
+      <li>📐 <code class="code-inline">width</code> / <code class="code-inline">height</code> — size of images</li>
+      <li>🎨 <code class="code-inline">style</code> — add CSS styling directly</li>
+      <li>🆔 <code class="code-inline">id</code> / <code class="code-inline">class</code> — names for styling or scripting</li>
+    </ul>
+  </div>
+
+  <!-- MINI QUIZ C -->
+  <div id="tqC-wrap">
+    <div class="plenary-locked" id="tqC-locked">
+      <span class="pl-icon">🔒</span>
+      <h4>Plenary Quiz — Topic C Locked</h4>
+      <p>Your teacher will unlock this quiz after Topic C has been covered in class.</p>
+    </div>
+    <div id="tqC-unlocked" style="display:none">
+      <div class="topic-quiz-wrap">
+        <h3>🧩 Plenary Quiz — Topic C</h3>
+        <div class="tq-subtitle">Text Formatting Tags &amp; Attributes &nbsp;—&nbsp; 5 Questions</div>
+        <div id="tqC-questions"></div>
+        <button class="btn-tq-submit" id="tqC-btn" onclick="submitTopicQuiz('C')">✅ Check Answers</button>
+        <div class="tq-result" id="tqC-result"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /panel-learn -->
+
+<!-- ============================================================
+     PANEL 2: PRACTICE
+     ============================================================ -->
+<div class="panel" id="panel-practice">
+  <div class="card orange" style="margin-bottom:22px">
+    <h2>💻 Try It Yourself!</h2>
+    <p>Type HTML code in the <b>Code Editor</b> and click <b>▶ Run</b> to see your webpage appear instantly! Edit and experiment freely. 🎉</p>
+  </div>
+
+  <div class="practice-card">
+    <h3>🎯 Task 1 — Text Formatting Tags</h3>
+    <div class="task-desc">
+      📋 <strong>Instructions:</strong> Try all the text formatting tags! See how <code class="code-inline">&lt;b&gt;</code>, <code class="code-inline">&lt;strong&gt;</code>, <code class="code-inline">&lt;i&gt;</code>, <code class="code-inline">&lt;em&gt;</code>, <code class="code-inline">&lt;u&gt;</code> and <code class="code-inline">&lt;mark&gt;</code> change how text looks. Notice how <code class="code-inline">&lt;br&gt;</code> makes a new line and <code class="code-inline">&lt;hr&gt;</code> draws a line!
+    </div>
+    <div class="editor-wrap">
+      <div class="editor-box">
+        <label>✏️ Code Editor</label>
+        <textarea class="code-editor" id="editor1">&lt;!-- This is an HTML comment - browsers ignore it! --&gt;
+&lt;!-- Comments help explain your code to others --&gt;
+
+&lt;h1&gt;Text Formatting in HTML&lt;/h1&gt;
+
+&lt;p&gt;&lt;b&gt;Bold text&lt;/b&gt; using the b tag&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Strong text&lt;/strong&gt; using strong tag&lt;/p&gt;
+&lt;p&gt;&lt;i&gt;Italic text&lt;/i&gt; using the i tag&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Emphasised text&lt;/em&gt; using em tag&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Underlined text&lt;/u&gt; using the u tag&lt;/p&gt;
+&lt;p&gt;&lt;mark&gt;Highlighted text&lt;/mark&gt; using mark tag&lt;/p&gt;
+
+&lt;!-- br makes a blank line break --&gt;
+&lt;br&gt;
+
+&lt;!-- hr draws a horizontal line --&gt;
+&lt;hr&gt;
+
+&lt;p&gt;&lt;small&gt;Small text using small tag&lt;/small&gt;&lt;/p&gt;</textarea>
+        <button class="btn-run" onclick="runCode('editor1','preview1')">▶ Run Code</button>
+      </div>
+      <div class="preview-box">
+        <label>👁️ Live Preview</label>
+        <iframe class="preview-frame" id="preview1"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="practice-card">
+    <h3>🎯 Task 2 — Superscript, Subscript &amp; Comments</h3>
+    <div class="task-desc">
+      📋 <strong>Instructions:</strong> Learn how <code class="code-inline">&lt;sup&gt;</code> puts text <em>above</em> the line (like 2²) and <code class="code-inline">&lt;sub&gt;</code> puts text <em>below</em> (like H₂O). Use HTML comments to label your code!
+    </div>
+    <div class="editor-wrap">
+      <div class="editor-box">
+        <label>✏️ Code Editor</label>
+        <textarea class="code-editor" id="editor2">&lt;!-- Superscript and Subscript examples --&gt;
+&lt;h2&gt;Maths &amp; Science in HTML&lt;/h2&gt;
+
+&lt;!-- Superscript: text goes ABOVE the line --&gt;
+&lt;p&gt;Area = side&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;2&lt;sup&gt;3&lt;/sup&gt; = 8&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;!-- Subscript: text goes BELOW the line --&gt;
+&lt;p&gt;Water is H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
+&lt;p&gt;Carbon Dioxide is CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;!-- Combining tags --&gt;
+&lt;p&gt;&lt;b&gt;&lt;u&gt;Bold and Underlined&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;i&gt;&lt;mark&gt;Italic and Highlighted&lt;/mark&gt;&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;UAE&lt;/strong&gt; is &lt;em&gt;amazing&lt;/em&gt;! &#x1F1E6;&#x1F1EA;&lt;/p&gt;</textarea>
+        <button class="btn-run" onclick="runCode('editor2','preview2')">▶ Run Code</button>
+      </div>
+      <div class="preview-box">
+        <label>👁️ Live Preview</label>
+        <iframe class="preview-frame" id="preview2"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="practice-card">
+    <h3>🎯 Task 3 — My UAE Fact Page</h3>
+    <div class="task-desc">
+      📋 <strong>Instructions:</strong> Build a fact page about the UAE using ALL the formatting tags — headings, bold, italic, underline, highlight, small, sup, sub, &lt;br&gt;, &lt;hr&gt; and HTML comments!
+    </div>
+    <div class="editor-wrap">
+      <div class="editor-box">
+        <label>✏️ Code Editor</label>
+        <textarea class="code-editor" id="editor3">&lt;!-- My UAE Fact Page - by a Young Coder! --&gt;
+
+&lt;h1&gt;Amazing UAE Facts &#x1F1E6;&#x1F1EA;&lt;/h1&gt;
+&lt;h2&gt;Burj Khalifa&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;Burj Khalifa&lt;/strong&gt; is the
+&lt;mark&gt;tallest building&lt;/mark&gt; in the world!&lt;/p&gt;
+&lt;p&gt;Height: &lt;b&gt;828 metres&lt;/b&gt;&lt;br&gt;
+Floors: &lt;b&gt;163&lt;/b&gt;&lt;br&gt;
+Year: &lt;b&gt;2010&lt;/b&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;UAE in Numbers&lt;/h2&gt;
+&lt;p&gt;Area: 83,600 km&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Seawater:&lt;/em&gt; NaCl
+(Na + Cl&lt;sub&gt;-&lt;/sub&gt;)&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;u&gt;Did you know?&lt;/u&gt;
+UAE has &lt;i&gt;7 emirates&lt;/i&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;small&gt;Source: UAE Government&lt;/small&gt;&lt;/p&gt;</textarea>
+        <button class="btn-run" onclick="runCode('editor3','preview3')">▶ Run Code</button>
+      </div>
+      <div class="preview-box">
+        <label>👁️ Live Preview</label>
+        <iframe class="preview-frame" id="preview3"></iframe>
+      </div>
+    </div>
+  </div>
+</div><!-- /panel-practice -->
+
+<!-- ============================================================
+     PANEL 3: FINAL QUIZ
+     ============================================================ -->
+<div class="panel" id="panel-finalquiz">
+
+  <!-- LOCKED STATE -->
+  <div class="quiz-locked" id="quizLockedView">
+    <div class="lock-icon">🔒</div>
+    <h2>Final Quiz — Locked</h2>
+    <p>Your teacher will unlock this quiz once all topics have been covered in class.<br>Complete the Learn section and all three Plenary Quizzes first! 📚</p>
+  </div>
+
+  <!-- UNLOCKED STATE -->
+  <div id="quizUnlockedView" style="display:none;">
+    <div class="quiz-header">
+      <h2>🏆 Final HTML Quiz Challenge!</h2>
+      <p style="color:#777;font-size:.95rem;">Answer all 7 questions — only a perfect score earns the Champion Badge! 🏅</p>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="quizProgress" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 7 answered</div>
+    </div>
+
+    <div id="quizForm">
+      <div class="question-card">
+        <div class="q-num">Question 1 of 7</div>
+        <div class="q-text">🌐 What does HTML stand for?</div>
+        <div class="options" id="q1">
+          <label><input type="radio" name="q1" value="a"> HyperText Makeup Language</label>
+          <label><input type="radio" name="q1" value="b"> HyperText Markup Language</label>
+          <label><input type="radio" name="q1" value="c"> High Text Markup Language</label>
+          <label><input type="radio" name="q1" value="d"> HyperTool Making Language</label>
+        </div>
+      </div>
+      <div class="question-card">
+        <div class="q-num">Question 2 of 7</div>
+        <div class="q-text">🏷️ Which tag makes the BIGGEST heading?</div>
+        <div class="options" id="q2">
+          <label><input type="radio" name="q2" value="a"> &lt;h3&gt;</label>
+          <label><input type="radio" name="q2" value="b"> &lt;heading&gt;</label>
+          <label><input type="radio" name="q2" value="c"> &lt;h1&gt;</label>
+          <label><input type="radio" name="q2" value="d"> &lt;big&gt;</label>
+        </div>
+      </div>
+      <div class="question-card">
+        <div class="q-num">Question 3 of 7</div>
+        <div class="q-text">🗼 What does the &lt;body&gt; tag contain?</div>
+        <div class="options" id="q3">
+          <label><input type="radio" name="q3" value="a"> Hidden information like the title</label>
+          <label><input type="radio" name="q3" value="b"> Everything the user can SEE on the page</label>
+          <label><input type="radio" name="q3" value="c"> Only images</label>
+          <label><input type="radio" name="q3" value="d"> The website address</label>
+        </div>
+      </div>
+      <div class="question-card">
+        <div class="q-num">Question 4 of 7</div>
+        <div class="q-text">✍️ Which tag makes text appear in <b>BOLD</b>?</div>
+        <div class="options" id="q4">
+          <label><input type="radio" name="q4" value="a"> &lt;i&gt;</label>
+          <label><input type="radio" name="q4" value="b"> &lt;b&gt;</label>
+          <label><input type="radio" name="q4" value="c"> &lt;u&gt;</label>
+          <label><input type="radio" name="q4" value="d"> &lt;em&gt;</label>
+        </div>
+      </div>
+      <div class="question-card">
+        <div class="q-num">Question 5 of 7</div>
+        <div class="q-text">🖼️ Which tag is used to display an IMAGE?</div>
+        <div class="options" id="q5">
+          <label><input type="radio" name="q5" value="a"> &lt;picture&gt;</label>
+          <label><input type="radio" name="q5" value="b"> &lt;photo&gt;</label>
+          <label><input type="radio" name="q5" value="c"> &lt;img&gt;</label>
+          <label><input type="radio" name="q5" value="d"> &lt;image&gt;</label>
+        </div>
+      </div>
+      <div class="question-card">
+        <div class="q-num">Question 6 of 7</div>
+        <div class="q-text">📝 What is the correct file extension for an HTML file?</div>
+        <div class="options" id="q6">
+          <label><input type="radio" name="q6" value="a"> .css</label>
+          <label><input type="radio" name="q6" value="b"> .js</label>
+          <label><input type="radio" name="q6" value="c"> .html</label>
+          <label><input type="radio" name="q6" value="d"> .txt</label>
+        </div>
+      </div>
+      <div class="question-card">
+        <div class="q-num">Question 7 of 7</div>
+        <div class="q-text">💬 How do you write an HTML Comment?</div>
+        <div class="options" id="q7">
+          <label><input type="radio" name="q7" value="a"> // This is a comment</label>
+          <label><input type="radio" name="q7" value="b"> &lt;!-- This is a comment --&gt;</label>
+          <label><input type="radio" name="q7" value="c"> /* This is a comment */</label>
+          <label><input type="radio" name="q7" value="d"> # This is a comment</label>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="submitFinalQuiz()">🎯 Check My Answers!</button>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="score-circle" id="scoreCircle"></div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultMsg"></p>
+      <div class="progress-bar-wrap" style="max-width:300px;margin:0 auto 10px">
+        <div class="progress-bar-fill" id="resultProgress"></div>
+      </div>
+      <p id="resultScore" style="font-weight:800;font-size:1.2rem;color:#1A237E;"></p>
+      <div class="badge-section" id="badgeSection"></div>
+      <div class="btn-row">
+        <button class="btn-retry" onclick="retryQuiz()">🔄 Try Again</button>
+        <button class="btn-download" onclick="downloadScore()">📥 Download My Score</button>
+      </div>
+    </div>
+  </div>
+</div><!-- /panel-finalquiz -->
+
+<!-- ============================================================
+     TEACHER PANEL
+     ============================================================ -->
+<div class="panel" id="panel-teacher">
+  <div class="teacher-card">
+    <h2>👩‍🏫 Teacher Panel</h2>
+
+    <!-- TOPIC UNLOCK CONTROLS -->
+    <div class="unlock-control">
+      <h3>📖 Plenary Quiz Access — Per Topic</h3>
+      <p>Unlock each plenary quiz only after you have taught that topic in class. Students cannot see the questions until you unlock them here.</p>
+      <div class="topic-controls">
+
+        <div class="topic-toggle-row">
+          <div>
+            <div class="tt-label">📖 Topic A — What is HTML, Editors &amp; Basic Structure</div>
+            <div class="tt-info" id="tA-status-text">🔒 Plenary quiz is locked</div>
+          </div>
+          <div class="unlock-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="topicA-toggle" onchange="toggleTopicLock('A')">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="unlock-status-badge status-locked" id="tA-badge">Locked</span>
+          </div>
+        </div>
+
+        <div class="topic-toggle-row">
+          <div>
+            <div class="tt-label">📖 Topic B — Important HTML Tags &amp; Elements</div>
+            <div class="tt-info" id="tB-status-text">🔒 Plenary quiz is locked</div>
+          </div>
+          <div class="unlock-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="topicB-toggle" onchange="toggleTopicLock('B')">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="unlock-status-badge status-locked" id="tB-badge">Locked</span>
+          </div>
+        </div>
+
+        <div class="topic-toggle-row">
+          <div>
+            <div class="tt-label">📖 Topic C — Text Formatting Tags &amp; Attributes</div>
+            <div class="tt-info" id="tC-status-text">🔒 Plenary quiz is locked</div>
+          </div>
+          <div class="unlock-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="topicC-toggle" onchange="toggleTopicLock('C')">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="unlock-status-badge status-locked" id="tC-badge">Locked</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FINAL QUIZ UNLOCK CONTROL -->
+    <div class="unlock-control" style="margin-top:16px;">
+      <h3>🏆 Final Quiz Access Control</h3>
+      <p>Unlock the Final Quiz only after all three topics have been taught and plenary quizzes completed.</p>
+      <div class="unlock-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="quizUnlockToggle" onchange="toggleQuizLock()">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label locked" id="toggleLabel">🔒 Quiz is LOCKED</span>
+        <span class="unlock-status-badge status-locked" id="unlockBadge">Locked</span>
+      </div>
+    </div>
+
+    <!-- FINAL QUIZ SCORES -->
+    <h2 style="margin-bottom:14px;">🏆 Final Quiz — Student Records</h2>
+    <div id="teacherTable"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;align-items:center;">
+      <button class="btn-excel" onclick="downloadExcel()">📊 Download as Spreadsheet (.xls)</button>
+      <button class="btn-csv"   onclick="downloadCSV()">📄 Download as CSV</button>
+      <button class="btn-clear" onclick="clearAllScores()">🗑️ Clear All Records</button>
+    </div>
+
+    <!-- PLENARY QUIZ SCORES -->
+    <h2 style="margin-bottom:6px;margin-top:36px;">🧩 Plenary Quiz — Student Records</h2>
+    <p style="font-size:.88rem;color:#777;margin-bottom:14px;font-weight:600;">Scores from all three topic plenary quizzes (A, B and C)</p>
+    <div id="plenaryTable"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;align-items:center;">
+      <button class="btn-excel" onclick="downloadPlenaryExcel()">📊 Download Plenary as .xls</button>
+      <button class="btn-csv"   onclick="downloadPlenaryCSV()">📄 Download Plenary as CSV</button>
+      <button class="btn-clear" onclick="clearPlenaryScores()">🗑️ Clear Plenary Records</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrapper -->
+<canvas id="badgeCanvas" style="display:none"></canvas>
+
+<script>
+// ====================================================
+//  CONSTANTS & STATE
+// ====================================================
+let currentStudent = { name:'', className:'' };
+const STORAGE_SCORES  = 'htmlAdv_scores';
+const STORAGE_PLENARY = 'htmlAdv_plenary';  // per-topic quiz scores
+const STORAGE_UNLOCK  = 'htmlAdv_quizUnlocked';
+const STORAGE_TOPICS  = 'htmlAdv_topicsUnlocked';
+const TOTAL_Q = 7;
+const TEACHER_PASSWORD = 'teacher123';
+
+const CORRECT = { q1:'b', q2:'c', q3:'b', q4:'b', q5:'c', q6:'c', q7:'b' };
+const CORRECT_TEXT = {
+  q1:'HyperText Markup Language', q2:'&lt;h1&gt;',
+  q3:'Everything the user can SEE on the page', q4:'&lt;b&gt;',
+  q5:'&lt;img&gt;', q6:'.html', q7:'&lt;!-- This is a comment --&gt;'
+};
+const Q_LABELS = {
+  q1:'🌐 What does HTML stand for?',
+  q2:'🏷️ Which tag makes the BIGGEST heading?',
+  q3:'🗼 What does the &lt;body&gt; tag contain?',
+  q4:'✍️ Which tag makes text appear in BOLD?',
+  q5:'🖼️ Which tag is used to display an IMAGE?',
+  q6:'📝 What is the correct file extension for an HTML file?',
+  q7:'💬 How do you write an HTML Comment?'
+};
+
+// ====================================================
+//  TOPIC MINI-QUIZ QUESTION BANK
+// ====================================================
+const TOPIC_QUIZZES = {
+  A: { questions: [
+    { q:'🌐 What does HTML stand for?',
+      opts:['HyperTool Making Language','HyperText Markup Language','High Text Makeup Language','Home Tool Markup Language'], ans:1 },
+    { q:'📁 Which file extension is used to save an HTML file?',
+      opts:['.css','.html','.js','.txt'], ans:1 },
+    { q:'🏗️ Which tag contains all the VISIBLE content of a webpage?',
+      opts:['&lt;head&gt;','&lt;title&gt;','&lt;body&gt;','&lt;html&gt;'], ans:2 },
+    { q:'🛠️ Which of these is an online HTML editor needing no installation?',
+      opts:['Notepad','VS Code','CodePen','MS Word'], ans:2 },
+    { q:'🧠 Which part of HTML holds hidden info like the page title?',
+      opts:['&lt;body&gt;','&lt;footer&gt;','&lt;head&gt;','&lt;div&gt;'], ans:2 }
+  ]},
+  B: { questions: [
+    { q:'🔢 Which tag creates a NUMBERED (ordered) list?',
+      opts:['&lt;ul&gt;','&lt;li&gt;','&lt;ol&gt;','&lt;list&gt;'], ans:2 },
+    { q:'↩️ Which tag creates a LINE BREAK (like pressing Enter)?',
+      opts:['&lt;lb&gt;','&lt;break&gt;','&lt;br&gt;','&lt;hr&gt;'], ans:2 },
+    { q:'📸 Which HTML tag is used to show an IMAGE on a page?',
+      opts:['&lt;image&gt;','&lt;picture&gt;','&lt;photo&gt;','&lt;img&gt;'], ans:3 },
+    { q:'📦 Which tag is used to GROUP elements into a container box?',
+      opts:['&lt;span&gt;','&lt;div&gt;','&lt;p&gt;','&lt;section&gt;'], ans:1 },
+    { q:'📏 Which tag draws a HORIZONTAL LINE across the page?',
+      opts:['&lt;br&gt;','&lt;line&gt;','&lt;hr&gt;','&lt;border&gt;'], ans:2 }
+  ]},
+  C: { questions: [
+    { q:'✍️ Which tag makes text appear in BOLD?',
+      opts:['&lt;i&gt;','&lt;u&gt;','&lt;b&gt;','&lt;em&gt;'], ans:2 },
+    { q:'🔆 Which tag HIGHLIGHTS text in yellow?',
+      opts:['&lt;mark&gt;','&lt;highlight&gt;','&lt;yellow&gt;','&lt;span&gt;'], ans:0 },
+    { q:'🔬 Which tag shows text BELOW the line (like H₂O)?',
+      opts:['&lt;sup&gt;','&lt;small&gt;','&lt;sub&gt;','&lt;del&gt;'], ans:2 },
+    { q:'🔗 Which ATTRIBUTE holds the link address in an &lt;a&gt; tag?',
+      opts:['src','link','url','href'], ans:3 },
+    { q:'💬 Which of these is a correct HTML comment?',
+      opts:['// this is a comment','/* this is a comment */','&lt;!-- this is a comment --&gt;','# this is a comment'], ans:2 }
+  ]}
+};
+
+// ====================================================
+//  BUILD TOPIC MINI-QUIZZES
+// ====================================================
+function buildTopicQuizzes() {
+  ['A','B','C'].forEach(key => {
+    const container = document.getElementById('tq'+key+'-questions');
+    if (!container) return;
+    let html = '';
+    TOPIC_QUIZZES[key].questions.forEach((q, qi) => {
+      const name = 'tq'+key+'_q'+qi;
+      let optsHtml = '';
+      q.opts.forEach((opt, oi) => {
+        optsHtml += `<label><input type="radio" name="${name}" value="${oi}"> ${opt}</label>`;
+      });
+      html += `<div class="tq-question">
+        <div class="tq-qtext">Q${qi+1}. ${q.q}</div>
+        <div class="tq-options" id="${name}-opts">${optsHtml}</div>
+      </div>`;
+    });
+    container.innerHTML = html;
+  });
+}
+
+// ====================================================
+//  SUBMIT TOPIC MINI-QUIZ
+// ====================================================
+function submitTopicQuiz(key) {
+  const qList    = TOPIC_QUIZZES[key].questions;
+  const resultEl = document.getElementById('tq'+key+'-result');
+  const submitBtn = document.getElementById('tq'+key+'-btn');
+  let score = 0;
+
+  for (let qi = 0; qi < qList.length; qi++) {
+    const name    = 'tq'+key+'_q'+qi;
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    if (!checked) { alert('⚠️ Please answer all questions!'); return; }
+  }
+
+  qList.forEach((q, qi) => {
+    const name     = 'tq'+key+'_q'+qi;
+    const checked  = document.querySelector(`input[name="${name}"]:checked`);
+    const selected = parseInt(checked.value);
+    const optsDiv  = document.getElementById(name+'-opts');
+    optsDiv.querySelectorAll('input').forEach(r => r.disabled = true);
+    optsDiv.querySelectorAll('label').forEach((lbl, li) => {
+      if (li === q.ans) lbl.classList.add('tq-correct');
+      else if (li === selected && selected !== q.ans) lbl.classList.add('tq-wrong');
+    });
+    if (selected === q.ans) score++;
+  });
+
+  const pct  = Math.round(score / qList.length * 100);
+  const pass = pct >= 60;
+  resultEl.className = 'tq-result show ' + (pass ? 'pass' : 'fail');
+
+  if (pass) {
+    resultEl.innerHTML = `✅ Well done! You scored <strong>${score}/${qList.length}</strong> (${pct}%) 🌟 Move on to the next topic!`;
+  } else {
+    resultEl.innerHTML = `❌ You scored <strong>${score}/${qList.length}</strong> (${pct}%). Review the topic notes and try again! 💪
+      <br><button class="btn-tq-retry" onclick="retryTopicQuiz('${key}')">🔄 Try Again</button>`;
+  }
+  submitBtn.style.display = 'none';
+
+  // Save plenary score to localStorage
+  const allP = JSON.parse(localStorage.getItem(STORAGE_PLENARY) || '[]');
+  const now  = new Date();
+  allP.push({
+    name:      currentStudent.name,
+    className: currentStudent.className,
+    topic:     key,
+    topicLabel:{ A:'Topic A — What is HTML', B:'Topic B — HTML Tags', C:'Topic C — Formatting & Attributes' }[key],
+    score,
+    total:     qList.length,
+    pct,
+    passed:    pass,
+    date:      now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    time:      now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})
+  });
+  localStorage.setItem(STORAGE_PLENARY, JSON.stringify(allP));
+}
+
+function retryTopicQuiz(key) {
+  const qList     = TOPIC_QUIZZES[key].questions;
+  const resultEl  = document.getElementById('tq'+key+'-result');
+  const submitBtn = document.getElementById('tq'+key+'-btn');
+  qList.forEach((q, qi) => {
+    const name    = 'tq'+key+'_q'+qi;
+    const optsDiv = document.getElementById(name+'-opts');
+    optsDiv.querySelectorAll('input').forEach(r => { r.disabled = false; r.checked = false; });
+    optsDiv.querySelectorAll('label').forEach(l => l.classList.remove('tq-correct','tq-wrong'));
+  });
+  resultEl.className = 'tq-result';
+  resultEl.innerHTML = '';
+  submitBtn.style.display = 'inline-block';
+}
+
+// ====================================================
+//  START LEARNING
+// ====================================================
+function startLearning() {
+  const name = document.getElementById('studentName').value.trim();
+  const cls  = document.getElementById('studentClass').value.trim();
+  const msg  = document.getElementById('loginMsg');
+  if (!name) { msg.textContent = '⚠️ Please enter your name!'; return; }
+  if (!cls)  { msg.textContent = '⚠️ Please enter your class!'; return; }
+  msg.textContent = '';
+  currentStudent = { name, className: cls };
+  document.getElementById('loginCard').style.display = 'none';
+  document.getElementById('mainNav').style.display   = 'flex';
+  showLastScore();
+  applyQuizLockState();
+  applyTopicLockStates();
+  showTab('learn');
+  setTimeout(() => {
+    runCode('editor1','preview1');
+    runCode('editor2','preview2');
+    runCode('editor3','preview3');
+  }, 300);
+}
+
+// ====================================================
+//  LAST SCORE BAR
+// ====================================================
+function showLastScore() {
+  const all  = JSON.parse(localStorage.getItem(STORAGE_SCORES)||'[]');
+  const mine = all.filter(s => s.name.toLowerCase() === currentStudent.name.toLowerCase() && s.className === currentStudent.className);
+  if (!mine.length) return;
+  const last = mine[mine.length-1];
+  const bar  = document.getElementById('lastScoreBar');
+  bar.innerHTML = `🕐 Welcome back, <strong>${last.name}</strong>! Your last quiz score was <strong>${last.score}/${TOTAL_Q}</strong> on ${last.date}.`;
+  bar.classList.add('show');
+}
+
+// ====================================================
+//  TAB NAVIGATION
+// ====================================================
+function showTab(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  if (btn) btn.classList.add('active');
+  if (tab === 'teacher') renderTeacherView();
+}
+
+// ====================================================
+//  TOPIC PLENARY LOCK / UNLOCK
+// ====================================================
+function getTopicStates() {
+  const saved = localStorage.getItem(STORAGE_TOPICS);
+  return saved ? JSON.parse(saved) : { A: false, B: false, C: false };
+}
+function saveTopicStates(states) {
+  localStorage.setItem(STORAGE_TOPICS, JSON.stringify(states));
+}
+
+function applyTopicLockStates() {
+  const states = getTopicStates();
+  ['A','B','C'].forEach(key => {
+    const unlocked = !!states[key];
+    const lockedEl   = document.getElementById('tq'+key+'-locked');
+    const unlockedEl = document.getElementById('tq'+key+'-unlocked');
+    if (lockedEl)   lockedEl.style.display   = unlocked ? 'none'  : 'block';
+    if (unlockedEl) unlockedEl.style.display  = unlocked ? 'block' : 'none';
+  });
+}
+
+function toggleTopicLock(key) {
+  const states  = getTopicStates();
+  states[key]   = document.getElementById('topic'+key+'-toggle').checked;
+  saveTopicStates(states);
+  applyTopicLockStates();
+  syncTopicToggleUI();
+}
+
+function syncTopicToggleUI() {
+  const states = getTopicStates();
+  ['A','B','C'].forEach(key => {
+    const unlocked   = !!states[key];
+    const toggle     = document.getElementById('topic'+key+'-toggle');
+    const badge      = document.getElementById('t'+key+'-badge');
+    const statusText = document.getElementById('t'+key+'-status-text');
+    if (!toggle) return;
+    toggle.checked = unlocked;
+    if (unlocked) {
+      badge.textContent  = 'Unlocked';
+      badge.className    = 'unlock-status-badge status-unlocked';
+      statusText.textContent = '🔓 Plenary quiz is unlocked';
+    } else {
+      badge.textContent  = 'Locked';
+      badge.className    = 'unlock-status-badge status-locked';
+      statusText.textContent = '🔒 Plenary quiz is locked';
+    }
+  });
+}
+
+// ====================================================
+//  QUIZ LOCK / UNLOCK
+// ====================================================
+function isQuizUnlocked() {
+  return localStorage.getItem(STORAGE_UNLOCK) === 'true';
+}
+function applyQuizLockState() {
+  const unlocked = isQuizUnlocked();
+  document.getElementById('quizLockedView').style.display   = unlocked ? 'none'  : 'block';
+  document.getElementById('quizUnlockedView').style.display = unlocked ? 'block' : 'none';
+}
+function toggleQuizLock() {
+  const toggle   = document.getElementById('quizUnlockToggle');
+  const label    = document.getElementById('toggleLabel');
+  const badge    = document.getElementById('unlockBadge');
+  const unlocked = toggle.checked;
+  localStorage.setItem(STORAGE_UNLOCK, unlocked ? 'true' : 'false');
+  if (unlocked) {
+    label.textContent = '🔓 Quiz is UNLOCKED'; label.className = 'toggle-label unlocked';
+    badge.textContent = 'Unlocked'; badge.className = 'unlock-status-badge status-unlocked';
+  } else {
+    label.textContent = '🔒 Quiz is LOCKED'; label.className = 'toggle-label locked';
+    badge.textContent = 'Locked'; badge.className = 'unlock-status-badge status-locked';
+  }
+}
+function syncToggleUI() {
+  const unlocked = isQuizUnlocked();
+  document.getElementById('quizUnlockToggle').checked = unlocked;
+  const label = document.getElementById('toggleLabel');
+  const badge = document.getElementById('unlockBadge');
+  if (unlocked) {
+    label.textContent='🔓 Quiz is UNLOCKED'; label.className='toggle-label unlocked';
+    badge.textContent='Unlocked'; badge.className='unlock-status-badge status-unlocked';
+  } else {
+    label.textContent='🔒 Quiz is LOCKED'; label.className='toggle-label locked';
+    badge.textContent='Locked'; badge.className='unlock-status-badge status-locked';
+  }
+  syncTopicToggleUI();
+}
+
+// ====================================================
+//  TEACHER MODAL
+// ====================================================
+function openTeacherLogin() {
+  document.getElementById('teacherPwdMsg').textContent = '';
+  document.getElementById('teacherPwd').value = '';
+  document.getElementById('teacherModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('teacherPwd').focus(), 100);
+}
+function closeTeacherModal() {
+  document.getElementById('teacherModal').style.display = 'none';
+}
+function checkTeacherPwd() {
+  const pwd = document.getElementById('teacherPwd').value;
+  if (pwd === TEACHER_PASSWORD) {
+    closeTeacherModal();
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-teacher').classList.add('active');
+    const tBtn = document.getElementById('teacherAccessBtn');
+    tBtn.style.background = 'linear-gradient(135deg,#1A237E,#3949AB)';
+    tBtn.style.color = 'white';
+    tBtn.style.border = 'none';
+    tBtn.classList.add('active');
+    renderTeacherView();
+    syncToggleUI();
+  } else {
+    document.getElementById('teacherPwdMsg').textContent = '⚠️ Incorrect password. Try again!';
+    document.getElementById('teacherPwd').value = '';
+    document.getElementById('teacherPwd').focus();
+  }
+}
+document.getElementById('teacherModal').addEventListener('click', function(e){ if(e.target===this) closeTeacherModal(); });
+
+// ====================================================
+//  CODE EDITORS
+// ====================================================
+function runCode(editorId, previewId) {
+  const code  = document.getElementById(editorId).value;
+  const frame = document.getElementById(previewId);
+  const doc   = frame.contentDocument || frame.contentWindow.document;
+  doc.open(); doc.write(code); doc.close();
+}
+['editor1','editor2','editor3'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('keyup', () => runCode(id, id.replace('editor','preview')));
+});
+
+// ====================================================
+//  FINAL QUIZ PROGRESS
+// ====================================================
+document.querySelectorAll('.options input[type=radio]').forEach(r => r.addEventListener('change', updateQuizProgress));
+function updateQuizProgress() {
+  let ans = 0;
+  for (let i=1;i<=TOTAL_Q;i++) { if (document.querySelector(`input[name="q${i}"]:checked`)) ans++; }
+  document.getElementById('quizProgress').style.width = (ans/TOTAL_Q*100)+'%';
+  document.getElementById('progressLabel').textContent = ans+' / '+TOTAL_Q+' answered';
+}
+
+// ====================================================
+//  FINAL QUIZ SUBMIT
+// ====================================================
+function submitFinalQuiz() {
+  for (let i=1;i<=TOTAL_Q;i++) {
+    if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+      alert('⚠️ Please answer all questions before submitting!'); return;
+    }
+  }
+  let score = 0;
+  const studentAnswers = {};
+  for (let i=1;i<=TOTAL_Q;i++) {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`).value;
+    studentAnswers['q'+i] = sel;
+    if (sel === CORRECT['q'+i]) score++;
+  }
+  document.querySelectorAll('.options input').forEach(r => r.disabled = true);
+  document.querySelector('.btn-submit').style.display = 'none';
+  buildAnswerReview(studentAnswers, score);
+  showResult(score);
+  saveScore(score);
+}
+
+// ====================================================
+//  ANSWER REVIEW
+// ====================================================
+function buildAnswerReview(studentAnswers, score) {
+  const old = document.getElementById('answerReview');
+  if (old) old.remove();
+  let rows = '';
+  for (let i=1;i<=TOTAL_Q;i++) {
+    const key    = 'q'+i;
+    const isRight = studentAnswers[key] === CORRECT[key];
+    rows += `<div class="ar-row ${isRight?'ar-row-correct':'ar-row-wrong'}">
+      <div class="ar-qnum">Q${i}</div>
+      <div class="ar-content">
+        <div class="ar-question">${Q_LABELS[key]}</div>
+        <div class="ar-answer">${isRight?'✅':'❌'} <span class="ar-label">${isRight?'Correct!':'Incorrect'}</span>
+          &nbsp;|&nbsp; ✔️ <strong>Correct Answer:</strong> ${CORRECT_TEXT[key]}</div>
+      </div>
+    </div>`;
+  }
+  const div = document.createElement('div');
+  div.id = 'answerReview';
+  div.innerHTML = `<div class="answer-review-card"><h3>📋 Answer Review — ${score}/${TOTAL_Q} correct</h3>${rows}</div>`;
+  const quizForm = document.getElementById('quizForm');
+  quizForm.parentNode.insertBefore(div, quizForm.nextSibling);
+  div.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ====================================================
+//  SHOW RESULT
+// ====================================================
+function showResult(score) {
+  const pct = score/TOTAL_Q;
+  const circle = document.getElementById('scoreCircle');
+  const title  = document.getElementById('resultTitle');
+  const msg    = document.getElementById('resultMsg');
+  const prog   = document.getElementById('resultProgress');
+  const label  = document.getElementById('resultScore');
+  const badge  = document.getElementById('badgeSection');
+  const result = document.getElementById('resultCard');
+
+  circle.textContent = score+'/'+TOTAL_Q;
+  prog.style.width   = (pct*100)+'%';
+  label.textContent  = 'Your Score: '+score+' out of '+TOTAL_Q;
+
+  if (pct === 1) {
+    circle.style.background = 'linear-gradient(135deg,#66BB6A,#43A047)';
+    title.textContent = '🏆 Perfect Score! You\'re a Champion!';
+    msg.textContent   = 'Outstanding! You got every question right! 🌟';
+    title.style.color = '#2E7D32';
+    badge.innerHTML   = buildBadge();
+  } else if (pct >= .7) {
+    circle.style.background = 'linear-gradient(135deg,#FFD54F,#FFA000)';
+    title.textContent = '🌟 Great Job, '+currentStudent.name+'!';
+    msg.textContent   = 'You did really well! Review the missed questions and try again. 💪';
+    title.style.color = '#E65100';
+    badge.innerHTML   = '<div style="text-align:center;padding:18px;background:#FFF8E1;border-radius:14px;border:2px solid #FFD54F;margin-top:16px;"><p style="font-size:1.1rem;font-weight:700;color:#E65100;">💪 So close! Get 7/7 to unlock your Champion Badge!</p></div>';
+  } else {
+    circle.style.background = 'linear-gradient(135deg,#EF5350,#C62828)';
+    title.textContent = '📚 Keep Practising!';
+    msg.textContent   = 'Don\'t worry! Go back to Learn, review the topics and try again. 🚀';
+    title.style.color = '#C62828';
+    badge.innerHTML   = '<div style="text-align:center;padding:18px;background:#FFEBEE;border-radius:14px;border:2px solid #EF9A9A;margin-top:16px;"><p style="font-size:1.1rem;font-weight:700;color:#C62828;">💪 Try again to unlock your Champion Badge!</p></div>';
+  }
+  result.classList.add('show');
+  result.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ====================================================
+//  BADGE
+// ====================================================
+function buildBadge() {
+  const now = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  return `<div class="badge-wrap" id="badgeWrap">
+    <div class="badge-icon">🏅</div>
+    <h3>Certificate of Achievement</h3>
+    <p style="color:#777;font-size:.88rem;">This certifies that</p>
+    <div class="badge-name">${escHtml(currentStudent.name)}</div>
+    <p style="color:#777;font-size:.88rem;">Class: ${escHtml(currentStudent.className)}</p>
+    <div class="badge-title">🌐 HTML Beginner Champion 🎉</div>
+    <div style="font-family:'Fredoka One',cursive;color:#43A047;font-size:1rem;">Young Web Developer 🌐</div>
+    <div class="badge-date">Awarded on ${now}</div>
+    <br>
+    <button class="btn-download" onclick="downloadBadge()" style="margin-top:8px">🎖️ Download Badge as Image</button>
+  </div>`;
+}
+
+// ====================================================
+//  SAVE SCORE
+// ====================================================
+function saveScore(score) {
+  const all = JSON.parse(localStorage.getItem(STORAGE_SCORES)||'[]');
+  const now = new Date();
+  all.push({
+    name: currentStudent.name, className: currentStudent.className,
+    score, total: TOTAL_Q,
+    date: now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    time: now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
+    completed: true
+  });
+  localStorage.setItem(STORAGE_SCORES, JSON.stringify(all));
+}
+
+// ====================================================
+//  DOWNLOAD SCORE TXT
+// ====================================================
+function downloadScore() {
+  const all  = JSON.parse(localStorage.getItem(STORAGE_SCORES)||'[]');
+  const mine = all.filter(s => s.name.toLowerCase() === currentStudent.name.toLowerCase() && s.className === currentStudent.className);
+  const last = mine.length ? mine[mine.length-1] : null;
+  if (!last) { alert('No score found. Please complete the quiz first!'); return; }
+  const content = [
+    '=======================================',
+    '   HTML ADVENTURE - SCORE REPORT       ',
+    '=======================================','',
+    'Student Name   : '+last.name,
+    'Class / Section: '+last.className,
+    'Score          : '+last.score+' / '+last.total,
+    'Percentage     : '+Math.round(last.score/last.total*100)+'%',
+    'Date           : '+last.date,
+    'Time           : '+last.time,
+    'Status         : '+(last.completed?'Completed ✓':'Incomplete'),'',
+    '---------------------------------------',
+    'Module: HTML Adventure for Young Coders',
+    'CBSE | Sharjah, UAE',
+    '======================================='
+  ].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content],{type:'text/plain'}));
+  a.download = 'HTML_Score_'+last.name.replace(/\s+/g,'_')+'.txt';
+  a.click();
+}
+
+// ====================================================
+//  DOWNLOAD BADGE
+// ====================================================
+function downloadBadge() {
+  const canvas = document.getElementById('badgeCanvas');
+  canvas.width = 600; canvas.height = 380;
+  const ctx = canvas.getContext('2d');
+  const grd = ctx.createLinearGradient(0,0,600,380);
+  grd.addColorStop(0,'#FFF9C4'); grd.addColorStop(1,'#E1F5FE');
+  ctx.fillStyle = grd;
+  ctx.roundRect ? ctx.roundRect(0,0,600,380,24) : ctx.rect(0,0,600,380);
+  ctx.fill();
+  ctx.strokeStyle='#FFD54F'; ctx.lineWidth=6; ctx.strokeRect(8,8,584,364);
+  ctx.font='60px serif'; ctx.textAlign='center'; ctx.fillText('🏅',300,80);
+  ctx.fillStyle='#1A237E'; ctx.font='bold 26px Georgia'; ctx.fillText('Certificate of Achievement',300,130);
+  ctx.fillStyle='#E64A19'; ctx.font='bold 32px Georgia'; ctx.fillText(currentStudent.name,300,185);
+  ctx.fillStyle='#555'; ctx.font='18px Georgia'; ctx.fillText('Class: '+currentStudent.className,300,220);
+  ctx.fillStyle='#7B1FA2'; ctx.font='bold 22px Georgia'; ctx.fillText('🌐 HTML Beginner Champion 🎉',300,265);
+  ctx.fillStyle='#2E7D32'; ctx.font='bold 20px Georgia'; ctx.fillText('Young Web Developer 🌐',300,300);
+  const now = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  ctx.fillStyle='#999'; ctx.font='15px Georgia'; ctx.fillText('Awarded on '+now,300,345);
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = 'HTML_Badge_'+currentStudent.name.replace(/\s+/g,'_')+'.png';
+  a.click();
+}
+
+// ====================================================
+//  RETRY FINAL QUIZ
+// ====================================================
+function retryQuiz() {
+  document.querySelectorAll('.options input').forEach(r => { r.disabled=false; r.checked=false; });
+  document.querySelectorAll('.options label').forEach(l => l.classList.remove('correct','wrong'));
+  document.querySelector('.btn-submit').style.display = 'block';
+  document.getElementById('quizProgress').style.width = '0%';
+  document.getElementById('progressLabel').textContent = '0 / 7 answered';
+  document.getElementById('resultCard').classList.remove('show');
+  const rev = document.getElementById('answerReview');
+  if (rev) rev.remove();
+  document.getElementById('quizForm').scrollIntoView({behavior:'smooth'});
+}
+
+// ====================================================
+//  TEACHER VIEW
+// ====================================================
+function renderTeacherView() {
+  const all  = JSON.parse(localStorage.getItem(STORAGE_SCORES)||'[]');
+  const wrap = document.getElementById('teacherTable');
+  if (!all.length) { wrap.innerHTML='<div class="no-data">📭 No student attempts recorded yet.</div>'; }
+  else {
+    let rows = '';
+    all.forEach((s,i) => {
+      const pct  = Math.round(s.score/s.total*100);
+      const pill = pct===100?'pill-green':pct>=70?'pill-orange':'pill-red';
+      rows += `<tr>
+        <td>${i+1}</td>
+        <td><strong>${escHtml(s.name)}</strong></td>
+        <td>${escHtml(s.className)}</td>
+        <td><span class="score-pill ${pill}">${s.score}/${s.total} (${pct}%)</span></td>
+        <td>${s.date}</td>
+        <td>${s.time||'—'}</td>
+      </tr>`;
+    });
+    wrap.innerHTML = `<table class="score-table">
+      <thead><tr><th>#</th><th>Name</th><th>Class</th><th>Score</th><th>Date</th><th>Time</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+  }
+  renderPlenaryTable();
+}
+
+function clearAllScores() {
+  if (confirm('⚠️ Delete ALL student records? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_SCORES);
+    renderTeacherView();
+  }
+}
+
+// ====================================================
+//  DOWNLOAD CSV
+// ====================================================
+function downloadCSV() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_SCORES)||'[]');
+  if (!all.length) { alert('📭 No student data to download yet!'); return; }
+  const headers = ['#','Student Name','Class / Section','Score','Out Of','Percentage (%)','Grade','Date','Time','Status'];
+  const rows = all.map((s,i) => {
+    const pct   = Math.round(s.score/s.total*100);
+    const grade = pct===100?'A+':pct>=80?'A':pct>=70?'B':pct>=60?'C':'D';
+    return [i+1,'"'+s.name.replace(/"/g,'""')+'"','"'+s.className.replace(/"/g,'""')+'"',
+      s.score,s.total,pct,grade,'"'+(s.date||'')+'"','"'+(s.time||'')+'"',s.completed?'Completed':'Incomplete'].join(',');
+  });
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([[headers.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8;'}));
+  a.download = 'HTML_Adventure_Scores_'+today+'.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ====================================================
+//  DOWNLOAD EXCEL
+// ====================================================
+function downloadExcel() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_SCORES)||'[]');
+  if (!all.length) { alert('📭 No student data to download yet!'); return; }
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  let tableRows = '';
+  all.forEach((s,i) => {
+    const pct   = Math.round(s.score/s.total*100);
+    const grade = pct===100?'A+':pct>=80?'A':pct>=70?'B':pct>=60?'C':'D';
+    const bgCol = pct===100?'#C8E6C9':pct>=70?'#FFF9C4':'#FFCDD2';
+    const grCol = pct===100?'#1B5E20':pct>=70?'#E65100':'#B71C1C';
+    tableRows += `<tr>
+      <td style="text-align:center;">${i+1}</td><td style="font-weight:bold;">${s.name}</td>
+      <td style="text-align:center;">${s.className}</td><td style="text-align:center;">${s.score}</td>
+      <td style="text-align:center;">${s.total}</td><td style="text-align:center;background:${bgCol};">${pct}%</td>
+      <td style="text-align:center;font-weight:bold;color:${grCol};">${grade}</td>
+      <td style="text-align:center;">${s.date||''}</td><td style="text-align:center;">${s.time||''}</td>
+      <td style="text-align:center;">${s.completed?'✓ Completed':'Incomplete'}</td>
+    </tr>`;
+  });
+  const total   = all.length;
+  const avg     = (all.reduce((a,s)=>a+s.score,0)/total).toFixed(1);
+  const avgPct  = Math.round(all.reduce((a,s)=>a+(s.score/s.total*100),0)/total);
+  const perfect = all.filter(s=>s.score===s.total).length;
+  const passing = all.filter(s=>(s.score/s.total)>=.7).length;
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Scores</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;}table{border-collapse:collapse;width:100%;}th{background:#1A237E;color:white;padding:8px 12px;text-align:center;border:1px solid #999;}td{padding:7px 12px;border:1px solid #ddd;font-size:10.5pt;}tr:nth-child(even) td{background:#F5F5F5;}.title-row td{background:#1A237E;color:white;font-size:14pt;font-weight:bold;text-align:center;padding:14px;}.sub-row td{background:#3949AB;color:#E8EAF6;font-size:10pt;text-align:center;padding:6px;}.sl{background:#E8EAF6;font-weight:bold;color:#1A237E;}.sv{background:#FFF;text-align:center;font-weight:bold;}.br td{background:white;border:none;height:10px;}</style>
+</head><body><table>
+<tr class="title-row"><td colspan="10">🌐 HTML Adventure for Young Coders — Student Score Report</td></tr>
+<tr class="sub-row"><td colspan="10">Module: HTML Basics | CBSE | Sharjah, UAE &nbsp;|&nbsp; Generated: ${today}</td></tr>
+<tr class="br"><td colspan="10"></td></tr>
+<tr><th>#</th><th>Student Name</th><th>Class</th><th>Score</th><th>Out Of</th><th>Percentage</th><th>Grade</th><th>Date</th><th>Time</th><th>Status</th></tr>
+${tableRows}
+<tr class="br"><td colspan="10"></td></tr>
+<tr><td colspan="3" class="sl">📊 Total Attempts</td><td colspan="7" class="sv">${total}</td></tr>
+<tr><td colspan="3" class="sl">Average Score</td><td colspan="7" class="sv">${avg} / ${all[0].total} (${avgPct}%)</td></tr>
+<tr><td colspan="3" class="sl">Perfect Scores (100%)</td><td colspan="7" class="sv">${perfect} student${perfect!==1?'s':''}</td></tr>
+<tr><td colspan="3" class="sl">Passing (≥70%)</td><td colspan="7" class="sv">${passing} / ${total} (${Math.round(passing/total*100)}%)</td></tr>
+</table></body></html>`;
+  const fileDay = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([html],{type:'application/vnd.ms-excel;charset=utf-8;'}));
+  a.download = 'HTML_Adventure_Scores_'+fileDay+'.xls';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ====================================================
+//  PLENARY TABLE RENDER
+// ====================================================
+function renderPlenaryTable() {
+  const all  = JSON.parse(localStorage.getItem(STORAGE_PLENARY)||'[]');
+  const wrap = document.getElementById('plenaryTable');
+  if (!wrap) return;
+  if (!all.length) {
+    wrap.innerHTML = '<div class="no-data">📭 No plenary quiz attempts recorded yet.</div>';
+    return;
+  }
+  let rows = '';
+  all.forEach((s,i) => {
+    const pill = s.pct===100?'pill-green':s.pct>=60?'pill-orange':'pill-red';
+    const topicColor = {A:'#4FC3F7',B:'#FFB74D',C:'#AB47BC'}[s.topic]||'#aaa';
+    rows += `<tr>
+      <td>${i+1}</td>
+      <td><strong>${escHtml(s.name)}</strong></td>
+      <td>${escHtml(s.className)}</td>
+      <td><span style="display:inline-block;padding:3px 10px;border-radius:6px;font-size:.78rem;font-weight:800;background:${topicColor}22;color:${topicColor};border:1px solid ${topicColor}66;">
+        Topic ${s.topic}</span></td>
+      <td><span class="score-pill ${pill}">${s.score}/${s.total} (${s.pct}%)</span></td>
+      <td style="color:${s.passed?'#2E7D32':'#C62828'};font-weight:800;">${s.passed?'✅ Pass':'❌ Fail'}</td>
+      <td>${s.date}</td>
+      <td>${s.time||'—'}</td>
+    </tr>`;
+  });
+  wrap.innerHTML = `<table class="score-table">
+    <thead>
+      <tr><th>#</th><th>Name</th><th>Class</th><th>Topic</th><th>Score</th><th>Result</th><th>Date</th><th>Time</th></tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function clearPlenaryScores() {
+  if (confirm('⚠️ Delete ALL plenary quiz records? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_PLENARY);
+    renderPlenaryTable();
+  }
+}
+
+// ====================================================
+//  DOWNLOAD PLENARY CSV
+// ====================================================
+function downloadPlenaryCSV() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_PLENARY)||'[]');
+  if (!all.length) { alert('📭 No plenary quiz data to download yet!'); return; }
+  const headers = ['#','Student Name','Class / Section','Topic','Topic Name','Score','Out Of','Percentage (%)','Result','Date','Time'];
+  const rows = all.map((s,i) => [
+    i+1,
+    '"'+s.name.replace(/"/g,'""')+'"',
+    '"'+s.className.replace(/"/g,'""')+'"',
+    'Topic '+s.topic,
+    '"'+s.topicLabel+'"',
+    s.score, s.total, s.pct,
+    s.passed ? 'Pass' : 'Fail',
+    '"'+(s.date||'')+'"',
+    '"'+(s.time||'')+'"'
+  ].join(','));
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([[headers.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8;'}));
+  a.download = 'HTML_Adventure_Plenary_'+today+'.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ====================================================
+//  DOWNLOAD PLENARY EXCEL
+// ====================================================
+function downloadPlenaryExcel() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_PLENARY)||'[]');
+  if (!all.length) { alert('📭 No plenary quiz data to download yet!'); return; }
+  const today = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+
+  // Per-topic summary stats
+  const topicStats = {};
+  ['A','B','C'].forEach(t => {
+    const ts = all.filter(s=>s.topic===t);
+    topicStats[t] = ts.length ? {
+      attempts: ts.length,
+      avg:      Math.round(ts.reduce((a,s)=>a+s.pct,0)/ts.length),
+      passed:   ts.filter(s=>s.passed).length
+    } : null;
+  });
+
+  const topicBg  = {A:'#E3F2FD',B:'#FFF8E1',C:'#F3E5F5'};
+  const topicCol = {A:'#1565C0',B:'#E65100',C:'#6A1B9A'};
+
+  let tableRows = '';
+  all.forEach((s,i) => {
+    const bg = topicBg[s.topic]||'#fff';
+    const tc = topicCol[s.topic]||'#333';
+    const resultBg = s.passed ? '#E8F5E9' : '#FFEBEE';
+    const resultCol = s.passed ? '#1B5E20' : '#C62828';
+    tableRows += `<tr style="background:${bg}">
+      <td align="center">${i+1}</td>
+      <td style="font-weight:bold">${s.name}</td>
+      <td align="center">${s.className}</td>
+      <td align="center" style="font-weight:bold;color:${tc}">Topic ${s.topic}</td>
+      <td style="font-size:9pt">${s.topicLabel}</td>
+      <td align="center">${s.score}/${s.total}</td>
+      <td align="center">${s.pct}%</td>
+      <td align="center" style="font-weight:bold;color:${resultCol};background:${resultBg}">${s.passed?'Pass':'Fail'}</td>
+      <td align="center">${s.date||''}</td>
+      <td align="center">${s.time||''}</td>
+    </tr>`;
+  });
+
+  // Summary rows
+  let summaryRows = '';
+  ['A','B','C'].forEach(t => {
+    const st = topicStats[t];
+    const label = {A:'Topic A — What is HTML',B:'Topic B — HTML Tags',C:'Topic C — Formatting & Attributes'}[t];
+    summaryRows += st
+      ? `<tr><td colspan="3" class="sl">📖 ${label}</td>
+           <td colspan="3" class="sv">${st.attempts} attempt${st.attempts!==1?'s':''} · Avg ${st.avg}%</td>
+           <td colspan="4" class="sv">${st.passed}/${st.attempts} passed (${Math.round(st.passed/st.attempts*100)}%)</td></tr>`
+      : `<tr><td colspan="3" class="sl">📖 ${label}</td><td colspan="7" class="sv" style="color:#bbb">No attempts yet</td></tr>`;
+  });
+
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Plenary Scores</x:Name>
+<x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt}table{border-collapse:collapse;width:100%}
+th{background:#4A148C;color:white;padding:8px 12px;text-align:center;border:1px solid #6a1b9a}
+td{padding:7px 12px;border:1px solid #ddd;font-size:10.5pt}
+.tr{background:#4A148C;color:white;font-size:14pt;font-weight:bold;text-align:center;padding:14px}
+.sr{background:#7B1FA2;color:#EDE7F6;font-size:10pt;text-align:center;padding:6px}
+.sl{background:#EDE7F6;font-weight:bold;color:#4A148C}
+.sv{background:#fff;text-align:center;font-weight:bold}
+.br td{background:white;border:none;height:8px}
+</style></head><body><table>
+<tr><td colspan="10" class="tr">🧩 HTML Adventure — Plenary Quiz Score Report</td></tr>
+<tr><td colspan="10" class="sr">Topic A · Topic B · Topic C &nbsp;|&nbsp; CBSE | Sharjah, UAE &nbsp;|&nbsp; Generated: ${today}</td></tr>
+<tr class="br"><td colspan="10"></td></tr>
+<tr><th>#</th><th>Student Name</th><th>Class</th><th>Topic</th><th>Topic Name</th><th>Score</th><th>Percentage</th><th>Result</th><th>Date</th><th>Time</th></tr>
+${tableRows}
+<tr class="br"><td colspan="10"></td></tr>
+<tr><td colspan="10" class="sl" style="font-size:12pt;padding:10px 12px">📊 Summary by Topic</td></tr>
+${summaryRows}
+</table></body></html>`;
+
+  const fileDay = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([html],{type:'application/vnd.ms-excel;charset=utf-8;'}));
+  a.download = 'HTML_Adventure_Plenary_'+fileDay+'.xls';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ====================================================
+//  UTILITY
+// ====================================================
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ====================================================
+//  INIT
+// ====================================================
+window.addEventListener('load', () => {
+  buildTopicQuizzes();
+  applyQuizLockState();
+  applyTopicLockStates();
+});
+</script>
+</body>
+</html>
